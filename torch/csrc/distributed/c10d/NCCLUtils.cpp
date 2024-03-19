@@ -169,7 +169,12 @@ std::string getNcclErrorDetailStr(
   std::string interpret;
   std::string err;
 #ifdef ENABLE_NCCL_GET_LAST_ERROR
-  err = "\nLast error:\n" + std::string(ncclGetLastError(NULL));
+  auto ret = ncclGetLastError(NULL);
+  if (ret) {
+    err = "\nLast error:\n" + std::string(ret);
+  } else {
+    err = "\n Unknown Last error \n";
+  }
 #endif
   switch (error) {
     case ncclUnhandledCudaError:
